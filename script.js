@@ -4,7 +4,7 @@ if (DeviceMotionEvent) {
     DeviceMotionEvent.requestPermission()
         .then(response => {
             if (response === 'granted') {
-                is_running = true
+                is_running = true;
                 console.log('DeviceMotionEvent permission granted.');
             } else {
                 console.log('DeviceMotionEvent permission denied.');
