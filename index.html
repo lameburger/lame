@@ -37,6 +37,7 @@
                     </div>
                     <button class="btn btn-primary" onclick="getCadence()">Start</button>
                     <h3 id="accel_value">0</h3>
+                    <h3 id="energy_value">0</h3>
                     <canvas id="myChart"></canvas>
                 </div>
             </div>
@@ -61,29 +62,6 @@
     </div>
 
     <script>
-        // Get a reference to the canvas element
-        var ctx = document.getElementById("myChart").getContext("2d");
-
-        // Create initial empty data
-        var initialData = {
-        labels: [], // Array to hold time labels (if needed)
-        datasets: [
-            {
-            label: "Your Data",
-            data: [], // Array to hold your changing variable
-            backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color
-            borderColor: "rgba(75, 192, 192, 1)", // Line color
-            borderWidth: 2, // Line width
-            },
-        ],
-        };
-
-        // Create a chart with the initial data
-        var myChart = new Chart(ctx, {
-        type: "line", // Change this to "bar", "pie", etc., depending on your data type
-        data: initialData,
-        });
-
 
         // JavaScript to show/hide the genre select dropdown
         const genreDropdown = document.getElementById('genreDropdown');
@@ -105,41 +83,30 @@
                 if (response == 'granted') {
                     console.log("accelerometer permission granted");
                     window.addEventListener('devicemotion', (event) => {
-                        var headingElement = document.getElementById("accel_value");
+                        var headingElementAccel = document.getElementById("accel_value");
+                        var headingElementEnergy = document.getElementById("accel_value");
+                        var currentEnergy = 0;
                         var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
                         
                         let parsed = parseFloat(netAccel.toFixed(3));
 
-                        var newValue = parsed;
-                        updateChart(newValue);
+                        headingElementAccel.textContent = parsed.toString();
 
-                        headingElement.textContent = parsed.toString();
+                        if (netAccel < 1) {
+                            currentEnergy = 30;
+                        } else if (netAccel > 1 && netAccel < 10) {
+                            currentEnergy =  60;
+                        } else {
+                            currentEnergy = 80;
+                        }
+
+                        headingElementEnergy.textContent = currentEnergy.toString();
                     })
                 }
                 else{
                     headingElement.textContent = "Permission not granted"
                 }
             });
-        }
-
-        var maxDataPoints = 100;
-
-        // Update the chart with new data
-        function updateChart(newValue) {
-        // Add a new data point to the chart
-        myChart.data.datasets[0].data.push(newValue);
-
-        // If you want to add labels for each data point (e.g., timestamps)
-        myChart.data.labels.push(new Date().toLocaleTimeString());
-
-        // Remove the oldest data point if the limit is reached
-        if (myChart.data.datasets[0].data.length > maxDataPoints) {
-            myChart.data.datasets[0].data.shift();
-            myChart.data.labels.shift();
-        }
-
-        // Update the chart
-        myChart.update();
         }
   
       </script>      
