@@ -13,6 +13,7 @@ genreSelect.addEventListener('change', function () {
 });
 
 function getCadence() {
+    Window.warn('WORKING!')
     console.log("JS loaded");
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
