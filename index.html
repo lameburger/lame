@@ -137,7 +137,7 @@
                     if (longAccelHist.length > 30){
                         longAccelHist.shift();
                     }
-                    var energy = cadence * 0.05 * longAccelHist.reduce(adder) / accelHist;
+                    var energy = cadence * 0.05 * longAccelHist.reduce(adder) / accelHist.length;
                     headingElementEnergy.textContent = "Energy: " + energy;
 
                     // Set another timeout for the next event processing after 100 milliseconds
