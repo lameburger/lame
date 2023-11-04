@@ -109,13 +109,13 @@
                         
                         let parsed = parseFloat(netAccel.toFixed(3));
 
+                        setInterval(function() {
+                            var newValue = parsed;
+                            updateChart(newValue);
+                        }, 1000);
+
                         headingElement.textContent = parsed.toString();
-                        
                     })
-                    setInterval(function() {
-                    var newValue = parsed;
-                    updateChart(newValue);
-                    }, 1000);
                 }
                 else{
                     headingElement.textContent = "Permission not granted"
