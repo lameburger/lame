@@ -84,7 +84,7 @@
                     console.log("accelerometer permission granted");
                     window.addEventListener('devicemotion', (event) => {
                         var headingElementAccel = document.getElementById("accel_value");
-                        var headingElementEnergy = document.getElementById("accel_value");
+                        var headingElementEnergy = document.getElementById("energy_value");
                         var currentEnergy = 0;
                         var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
                         
