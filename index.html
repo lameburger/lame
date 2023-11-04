@@ -132,7 +132,7 @@
             myChart.data.labels.push(new Date().toLocaleTimeString());
         
             // Limit the number of data points displayed to a certain number (optional)
-            var maxDataPoints = 20; // Adjust as needed
+            var maxDataPoints = 2000; // Adjust as needed
             if (myChart.data.datasets[0].data.length > maxDataPoints) {
             myChart.data.datasets[0].data.shift();
             myChart.data.labels.shift();
