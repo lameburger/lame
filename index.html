@@ -86,7 +86,9 @@
                             </select>
                         </h3>
                     </div>
-                    <button id="accelPermsButton"  style="height:50px;" onclick="getCadence()"><h1>Start Tracking</h1></button>
+                    <div class="container mt-5">
+                        <button class="btn btn-primary">Start</button>
+                    </div>
                     <h3 id="accel_value">0</h3>
                 </div>
             </div>
@@ -135,6 +137,8 @@
                         var headingElement = document.getElementById("accel_value");
                         var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
                         
+                        let parsed = parseFloat(netAccel.toFixed(3));
+
                         headingElement.textContent = netAccel.toString();
                     })
                 }
