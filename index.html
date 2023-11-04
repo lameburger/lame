@@ -112,12 +112,10 @@
                         headingElement.textContent = parsed.toString();
                         
                     })
-                    setTimeout( function() {
-                        setInterval(function() {
-                        var newValue = parsed;
-                        updateChart(newValue);
+                    setInterval(function() {
+                    var newValue = parsed;
+                    updateChart(newValue);
                     }, 1000);
-                    }, 1000)
                 }
                 else{
                     headingElement.textContent = "Permission not granted"
