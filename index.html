@@ -36,6 +36,11 @@
                         </h3>
                     </div>
                     <button class="btn btn-primary" onclick="getCadence()">Start</button>
+                    <audio id="myAudio" controls>
+                        <source src="example.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                      </audio>
+                      <input type="range" id="speedControl" min="0.1" max="2" step="0.1" value="1">
                     <h3 id="accel_value">0</h3>
                     <h3 id="energy_value">0</h3>
                     <canvas id="myChart"></canvas>
@@ -66,6 +71,8 @@
         // JavaScript to show/hide the genre select dropdown
         const genreDropdown = document.getElementById('genreDropdown');
         const genreSelect = document.getElementById('genreSelect');
+        const audio = document.getElementById('myAudio');
+        const speedControl = document.getElementById('speedControl');
 
         genreDropdown.addEventListener('click', function () {
             genreSelect.classList.toggle('d-none');
@@ -101,6 +108,18 @@
                         }
 
                         headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
+                        speedControl.addEventListener('input', () => {
+                        audio.playbackRate = parseFloat(speedControl.value);
+                        });
+
+                        function updateAudioSpeed(speed) {
+                            audio.playbackRate = speed;
+                        }
+
+                        function onVariableChange(newSpeed) {
+                            variableValue = netAccel/40;
+                            updateAudioSpeed(variableValue);
+                        }
                     })
                 }
                 else{
