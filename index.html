@@ -131,7 +131,7 @@
                     avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
 
                     cadence = 60000 / avgDiff;
-                    headingElementCadence.textContent = "Cadence: " + cadence;
+                    headingElementCadence.textContent = "Cadence: " + avgDiff;
 
                     //Calculate energy
                     if (longAccelHist.length > 30){
