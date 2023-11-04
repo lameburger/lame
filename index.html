@@ -71,8 +71,6 @@
         // JavaScript to show/hide the genre select dropdown
         const genreDropdown = document.getElementById('genreDropdown');
         const genreSelect = document.getElementById('genreSelect');
-        const audio = document.getElementById('myAudio');
-        const speedControl = document.getElementById('speedControl');
 
         genreDropdown.addEventListener('click', function () {
             genreSelect.classList.toggle('d-none');
@@ -107,22 +105,7 @@
                             currentEnergy = 80;
                         }
 
-                        //headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
-                        speedControl.addEventListener('input', () => {
-                        audio.playbackRate = parseFloat(speedControl.value);
-                        });
-
-                        function updateAudioSpeed(speed) {
-                            audio.playbackRate = speed;
-                        }
-
-                        let variableValue = netAccel/10;
-
-                        function onVariableChange(newSpeed) {
-                            variableValue = newSpeed;
-                            updateAudioSpeed(variableValue);
-                            headingElementEnergy.textContent = "Speed: " + newSpeed.toString();
-                        }
+                        headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
                     })
                 }
                 else{
