@@ -107,7 +107,7 @@
                             currentEnergy = 80;
                         }
 
-                        headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
+                        //headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
                         speedControl.addEventListener('input', () => {
                         audio.playbackRate = parseFloat(speedControl.value);
                         });
@@ -121,6 +121,7 @@
                         function onVariableChange(newSpeed) {
                             variableValue = newSpeed;
                             updateAudioSpeed(variableValue);
+                            headingElementEnergy.textContent = "Speed: " + currentEnergy.toString();
                         }
                     })
                 }
