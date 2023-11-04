@@ -84,14 +84,18 @@
 
             function processMotionEvent(event) {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
-                let parsed = parseFloat(netAccel.toFixed(3));
+                let parsed = parseFloat(netAccel.toFixed(1));
+
+                let parsed30 = parseFloat(((parsed * 10 + 30)).toFixed(1));
+                let parsed60 = parseFloat(((parsed + 60)).toFixed(1));
+                let parsed90 = parseFloat(((parsed + 90)).toFixed(1));
 
                 if (netAccel < 2) {
-                    headingElementEnergy.textContent = "Energy: " + (parsed * 10 + 30);
+                    headingElementEnergy.textContent = "Energy: " + parsed30;
                 } else if (netAccel > 2 && netAccel < 10) {
-                    headingElementEnergy.textContent = "Energy: " + (parsed + 60);
+                    headingElementEnergy.textContent = "Energy: " + parsed60;
                 } else {
-                    headingElementEnergy.textContent = "Energy: " + (parsed + 90);
+                    headingElementEnergy.textContent = "Energy: " + parsed90;
                 }
 
                 // Set another timeout for the next event processing after 100 milliseconds
