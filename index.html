@@ -128,7 +128,7 @@
                         tdiffHist[i] = timeHist[i] - timeHist[i - 1];
                     }
 
-                    avgDiff = tdiffHist.reduce(adder) / tdiffHist.length();
+                    avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
 
                     cadence = 60000 / avgDiff;
                     headingElementCadence.textContent = "Cadence: " + cadence;
