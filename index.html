@@ -79,10 +79,6 @@
         console.log("JS loaded")
         DeviceMotionEvent.requestPermission().then(response => {
             if (response == 'granted') {
-                let accelHist = []
-                let avgHist = []
-                let direction = true
-                let timeHist = []
                 console.log("accelerometer permission granted");
                 window.addEventListener('devicemotion', (event) => {
                     var headingElement = document.getElementById("accel_value");
@@ -113,17 +109,9 @@
                     // Example usage: Call updateNetAcceleration whenever netAcceleration changes
                     // For demonstration purposes, simulate a dynamically changing netAcceleration value
                     function simulateDynamicNetAcceleration() {
-                        setInterval(() => {
-                            updateNetAcceleration(netAccel);
-                        }, 1000);
+                        updateNetAcceleration(netAccel);
                     }
-
-                    // Start simulating dynamic netAcceleration
                     simulateDynamicNetAcceleration();
-
-                    
-                    
-                    headingElementEnergy.textContent = cadence.toString();
                 })
             }
             else{
