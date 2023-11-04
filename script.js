@@ -31,6 +31,6 @@ function getCadence(){
             })
         }
         else{
-            accelReader.innerHTML = "JS works!"
+            // accelReader.innerHTML = "JS works!"
         }
 }
