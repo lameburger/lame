@@ -6,10 +6,9 @@
     <link rel="icon" type="image/x-icon" href="/static/images/me.png">
     <link rel="stylesheet" href="/static/styles/styles.css">
     <script src="/static/scripts/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
-    <script>
-        // var playlist = {{ playlist|tojson|safe }};
-    </script>
+    {% set image = id ~ '.jpg' %}
 </head>
 
 <body>
@@ -27,21 +26,19 @@
             <div id="data" class="col-md-12 centered-div">
                 <div>
                     <div class="container">
-                    <form action="/" method="POST">
                         <h3>
-                            I want the genre
-                            <span class="genre-dropdown" id="genreDropdown">{{ genre }}</span>
-                            <select class="form-control custom-dropdown" id="genreSelect" name="genre">
-                                <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
-                                <option value="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
-                                <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
-                                <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
+                            I want the genre <span class="genre-dropdown" id="genreDropdown">rap</span>
+                            <select class="form-control custom-dropdown d-none" id="genreSelect">
+                                <option value="rap">rap</option>
+                                <option value="classical">classical</option>
+                                <option value="pop">pop</option>
                             </select>
                         </h3>
-                        <button class="btn btn-primary" type="submit">Start</button>
-                    </form>
+                    </div>
+                    <button class="btn btn-primary" onclick="getCadence()">Start</button>
                     <h3 id="accel_value">0</h3>
                     <h3 id="energy_value">0</h3>
+                    <canvas id="myChart"></canvas>
                 </div>
             </div>
         </div>
@@ -50,20 +47,12 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <!-- This is temporary templating this should be handled dynamically by js and the playlist variability-->
-                            <img id="art" src="{{ playlist[9]['image'] }}" alt="Description of the image" class="img-fluid">
+                            <img id="art" src="/static/images/{{ image }}" alt="Description of the image" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong>{{ playlist[9]['name'] }}</li>
-                                <li>
-                                    <strong>{% if playlist[9]['artists']|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
-                                    {% if playlist[9]['artists']|length > 1 %}
-                                        {{ playlist[9]['artists']|join(', ') }}
-                                    {% else %}
-                                        {{ playlist[9]['artists'][0] }}
-                                    {% endif %}
-                                </li>
-                            <li><strong>Energy:</strong>{{ (playlist[9]['energy'] * 100) | round|int }}</li>
-                                                        </ul>
+                                <li><strong>Song Name:</strong>{{ song_name }}</li>
+                                <li><strong>Album:</strong>{{ album_name }}</li>
+                                <li><strong>Artist:</strong>{{ artist_name }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -71,6 +60,86 @@
             </div>
         </div>
     </div>
+    
+    <script>
+            // JavaScript to show/hide the genre select dropdown
+    const genreDropdown = document.getElementById('genreDropdown');
+    const genreSelect = document.getElementById('genreSelect');
+
+    genreDropdown.addEventListener('click', function () {
+        genreSelect.classList.toggle('d-none');
+    });
+
+    genreSelect.addEventListener('change', function () {
+        const selectedGenre = genreSelect.value;
+        genreDropdown.textContent = selectedGenre;
+        genreSelect.classList.add('d-none');
+    });
+
+    function getCadence(){
+        console.log("JS loaded")
+        DeviceMotionEvent.requestPermission().then(response => {
+            if (response == 'granted') {
+                let accelHist = []
+                let avgHist = []
+                let direction = true
+                let timeHist = []
+                console.log("accelerometer permission granted");
+                window.addEventListener('devicemotion', (event) => {
+                    var headingElement = document.getElementById("accel_value");
+                    var headingElementEnergy = document.getElementById("energy_value");
+                    var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
+                    let parsed = parseFloat(netAccel.toFixed(3));
+                    if (accelHist.length() > 30) {
+                        accelHist.shift()
+                    }
+                    accelHist.push(netAccel)
+                    let avgAccel = accelHist.reduce(adder) / accelHist.length
+
+                    function adder(total, value, index, array){
+                        return total + value
+                    }
+
+                    if (avgHist.length() > 30) {
+                        avgHist.shift()
+                    }
+                    avgHist.push(avgAccel)
+                    if(avgHist[0] < avgHist[avgHist.length - 1] != direction){
+                        direction =  !direction
+                    }
+
+                    if (timeHist.length() > 5){
+                        timeHist.shift()
+                    }
+                    timeHist.push(new Date().getTime())
+                    let tdiffHist = [0]
+                    for(i = 1; i < timeHist.length; i++){
+                        tdiffHist[i] = timeHist[i] - timeHist[i - 1]
+                    }
+
+                    avgDiff = tdiffHist.reduce(adder) / tdiffHist.length()
+
+                    cadence = 60000 / avgDiff
+                    
+                    headingElementEnergy.textContent = cadence.toString();
+                })
+            }
+            else{
+                headingElement.textContent = "Permission not granted"
+            }
+        });
+    }
+
+    function adjustTempo(tempo, cadence){
+        let possibleTempos = [tempo / 4, tempo / 2, tempo, tempo * 2, tempo * 4]
+        possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
+        return possibleTempos[0]
+    }
+
+    function adjustSpeed(tempo, cadence){
+        return cadence / adjustTempo(tempo, cadence)
+    }
+    </script>
 </body>
 
 </html>
