@@ -123,23 +123,24 @@
             });
         }
 
+        var maxDataPoints = 100;
+
         // Update the chart with new data
         function updateChart(newValue) {
-            // Add a new data point to the chart
-            myChart.data.datasets[0].data.push(newValue);
-        
-            // If you want to add labels for each data point (e.g., timestamps)
-            myChart.data.labels.push(new Date().toLocaleTimeString());
-        
-            // Limit the number of data points displayed to a certain number (optional)
-            var maxDataPoints = 2000; // Adjust as needed
-            if (myChart.data.datasets[0].data.length > maxDataPoints) {
+        // Add a new data point to the chart
+        myChart.data.datasets[0].data.push(newValue);
+
+        // If you want to add labels for each data point (e.g., timestamps)
+        myChart.data.labels.push(new Date().toLocaleTimeString());
+
+        // Remove the oldest data point if the limit is reached
+        if (myChart.data.datasets[0].data.length > maxDataPoints) {
             myChart.data.datasets[0].data.shift();
             myChart.data.labels.shift();
-            }
-        
-            // Update the chart
-            myChart.update();
+        }
+
+        // Update the chart
+        myChart.update();
         }
   
       </script>      
