@@ -6,9 +6,10 @@
     <link rel="icon" type="image/x-icon" href="/static/images/me.png">
     <link rel="stylesheet" href="/static/styles/styles.css">
     <script src="/static/scripts/scripts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
-    {% set image = id ~ '.jpg' %}
+    <script>
+        // var playlist = {{ playlist|tojson|safe }};
+    </script>
 </head>
 
 <body>
@@ -26,19 +27,21 @@
             <div id="data" class="col-md-12 centered-div">
                 <div>
                     <div class="container">
+                    <form action="/" method="POST">
                         <h3>
-                            I want the genre <span class="genre-dropdown" id="genreDropdown">rap</span>
-                            <select class="form-control custom-dropdown d-none" id="genreSelect">
-                                <option value="rap">rap</option>
-                                <option value="classical">classical</option>
-                                <option value="pop">pop</option>
+                            I want the genre
+                            <span class="genre-dropdown" id="genreDropdown">{{ genre }}</span>
+                            <select class="form-control custom-dropdown" id="genreSelect" name="genre">
+                                <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
+                                <option value="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
+                                <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
+                                <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
                             </select>
                         </h3>
-                    </div>
-                    <button class="btn btn-primary" onclick="getCadence()">Start</button>
+                        <button class="btn btn-primary" type="submit">Start</button>
+                    </form>
                     <h3 id="accel_value">0</h3>
                     <h3 id="energy_value">0</h3>
-                    <canvas id="myChart"></canvas>
                 </div>
             </div>
         </div>
@@ -47,12 +50,20 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <img id="art" src="/static/images/{{ image }}" alt="Description of the image" class="img-fluid">
+                            <!-- This is temporary templating this should be handled dynamically by js and the playlist variability-->
+                            <img id="art" src="{{ playlist[9]['image'] }}" alt="Description of the image" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong>{{ song_name }}</li>
-                                <li><strong>Album:</strong>{{ album_name }}</li>
-                                <li><strong>Artist:</strong>{{ artist_name }}</li>
-                            </ul>
+                                <li><strong>Song Name:</strong>{{ playlist[9]['name'] }}</li>
+                                <li>
+                                    <strong>{% if playlist[9]['artists']|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
+                                    {% if playlist[9]['artists']|length > 1 %}
+                                        {{ playlist[9]['artists']|join(', ') }}
+                                    {% else %}
+                                        {{ playlist[9]['artists'][0] }}
+                                    {% endif %}
+                                </li>
+                            <li><strong>Energy:</strong>{{ (playlist[9]['energy'] * 100) | round|int }}</li>
+                                                        </ul>
                         </div>
                     </div>
                 </div>
@@ -60,56 +71,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-
-        // JavaScript to show/hide the genre select dropdown
-        const genreDropdown = document.getElementById('genreDropdown');
-        const genreSelect = document.getElementById('genreSelect');
-
-        genreDropdown.addEventListener('click', function () {
-            genreSelect.classList.toggle('d-none');
-        });
-
-        genreSelect.addEventListener('change', function () {
-            const selectedGenre = genreSelect.value;
-            genreDropdown.textContent = selectedGenre;
-            genreSelect.classList.add('d-none');
-        });
-
-        function getCadence(){
-            console.log("JS loaded")
-            DeviceMotionEvent.requestPermission().then(response => {
-                if (response == 'granted') {
-                    console.log("accelerometer permission granted");
-                    window.addEventListener('devicemotion', (event) => {
-                        var headingElementAccel = document.getElementById("accel_value");
-                        var headingElementEnergy = document.getElementById("energy_value");
-                        var currentEnergy = 0;
-                        var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
-                        
-                        let parsed = parseFloat(netAccel.toFixed(3));
-
-                        headingElementAccel.textContent = "Acceleration: " + parsed.toString();
-
-                        if (netAccel < 2) {
-                            currentEnergy = 30;
-                        } else if (netAccel > 2 && netAccel < 10) {
-                            currentEnergy =  60;
-                        } else {
-                            currentEnergy = 80;
-                        }
-
-                        headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
-                    })
-                }
-                else{
-                    headingElement.textContent = "Permission not granted"
-                }
-            });
-        }
-  
-      </script>      
 </body>
 
 </html>
