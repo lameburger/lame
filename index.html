@@ -63,26 +63,27 @@
     <script>
         // Get a reference to the canvas element
         var ctx = document.getElementById("myChart").getContext("2d");
-      
-        // Create a variable to store your data
-        var data = {
-          labels: [], // Array to hold time labels (if needed)
-          datasets: [
+
+        // Create initial empty data
+        var initialData = {
+        labels: [], // Array to hold time labels (if needed)
+        datasets: [
             {
-              label: "Your Data",
-              data: [], // Array to hold your changing variable
-              backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color
-              borderColor: "rgba(75, 192, 192, 1)", // Line color
-              borderWidth: 2, // Line width
+            label: "Your Data",
+            data: [], // Array to hold your changing variable
+            backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color
+            borderColor: "rgba(75, 192, 192, 1)", // Line color
+            borderWidth: 2, // Line width
             },
-          ],
+        ],
         };
-      
-        // Create a chart with your data
+
+        // Create a chart with the initial data
         var myChart = new Chart(ctx, {
-          type: "line", // Change this to "bar", "pie", etc., depending on your data type
-          data: data,
+        type: "line", // Change this to "bar", "pie", etc., depending on your data type
+        data: initialData,
         });
+
 
         // JavaScript to show/hide the genre select dropdown
         const genreDropdown = document.getElementById('genreDropdown');
