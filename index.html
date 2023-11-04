@@ -116,8 +116,10 @@
                             audio.playbackRate = speed;
                         }
 
+                        let variableValue = netAccel/10;
+
                         function onVariableChange(newSpeed) {
-                            variableValue = netAccel/40;
+                            variableValue = newSpeed;
                             updateAudioSpeed(variableValue);
                         }
                     })
