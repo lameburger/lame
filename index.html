@@ -102,20 +102,22 @@
             console.log("JS loaded")
             DeviceMotionEvent.requestPermission().then(response => {
                 if (response == 'granted') {
-                    console.log("accelerometer permission granted");
-                    window.addEventListener('devicemotion', (event) => {
-                        var headingElement = document.getElementById("accel_value");
-                        var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
-                        
-                        let parsed = parseFloat(netAccel.toFixed(3));
+                    setTimeout(function() {
+                        console.log("accelerometer permission granted");
+                        window.addEventListener('devicemotion', (event) => {
+                            var headingElement = document.getElementById("accel_value");
+                            var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
+                            
+                            let parsed = parseFloat(netAccel.toFixed(3));
 
-                        setInterval(function() {
-                            var newValue = parsed;
-                            updateChart(newValue);
-                        }, 3000);
-
-                        headingElement.textContent = parsed.toString();
-                    })
+                            headingElement.textContent = parsed.toString();
+                            
+                        })
+                    }, 100);
+                    setInterval(function() {
+                        var newValue = parsed;
+                        updateChart(newValue);
+                    }, 1000);
                 }
                 else{
                     headingElement.textContent = "Permission not granted"
