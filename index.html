@@ -86,32 +86,14 @@
                     var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2)
                     let parsed = parseFloat(netAccel.toFixed(3));
 
-                    let fluctuationCount = 0;
-                    let totalAcceleration = 0;
-
-                    // Function to update netAcceleration and calculate energy value
-                    function updateNetAcceleration(newAcceleration) {
-                        fluctuationCount++;
-                        totalAcceleration += newAcceleration;
-                        
-                        if (fluctuationCount === 20) {
-                            const averageAcceleration = totalAcceleration / 20; // Calculate average
-                            const normalizedValue = averageAcceleration / 50; // Normalize to range 0-1 (assuming netAcceleration ranges from 0 to 50)
-                            // Do something with the normalizedValue, for example, send it to another function or store it in a variable
-                            headingElementEnergy.textContent = normalizedValue.toString();
-
-                            // Reset values for the next 20 fluctuations
-                            fluctuationCount = 0;
-                            totalAcceleration = 0;
-                        }
+                    if (netAccel < 2) {
+                        headingElementEnergy.textContent = "Energy: " + (netAccel*10) + 30;
+                    } else if (netAccel > 2 && netAccel < 10) {
+                        headingElementEnergy.textContent = "Energy: " + netAccel + 60;
+                    } else {
+                        headingElementEnergy.textContent = "Energy: " + netAccel + 90;
                     }
-
-                    // Example usage: Call updateNetAcceleration whenever netAcceleration changes
-                    // For demonstration purposes, simulate a dynamically changing netAcceleration value
-                    function simulateDynamicNetAcceleration() {
-                        updateNetAcceleration(netAccel);
-                    }
-                    simulateDynamicNetAcceleration();
+                    
                 })
             }
             else{
