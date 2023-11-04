@@ -90,17 +90,17 @@
                         
                         let parsed = parseFloat(netAccel.toFixed(3));
 
-                        headingElementAccel.textContent = parsed.toString();
+                        headingElementAccel.textContent = "Acceleration: " + parsed.toString();
 
-                        if (netAccel < 1) {
+                        if (netAccel < 2) {
                             currentEnergy = 30;
-                        } else if (netAccel > 1 && netAccel < 10) {
+                        } else if (netAccel > 2 && netAccel < 10) {
                             currentEnergy =  60;
                         } else {
                             currentEnergy = 80;
                         }
 
-                        headingElementEnergy.textContent = currentEnergy.toString();
+                        headingElementEnergy.textContent = "Energy: " + currentEnergy.toString();
                     })
                 }
                 else{
