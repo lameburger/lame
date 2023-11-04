@@ -109,10 +109,8 @@
                         
                         let parsed = parseFloat(netAccel.toFixed(3));
 
-                        setInterval(function() {
-                            var newValue = parsed;
-                            updateChart(newValue);
-                        }, 1000);
+                        var newValue = parsed;
+                        updateChart(newValue);
 
                         headingElement.textContent = parsed.toString();
                     })
